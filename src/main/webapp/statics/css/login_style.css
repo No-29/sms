@@ -1,4 +1,70 @@
 body {
+    font-family: 'Poppins', sans-serif;
+    font-size: 100%;
     background: url(../images/login_bg.jpg)no-repeat center top;
-    margin-left: auto;
+    background-size: cover;
+    -webkit-background-size: cover;
+    background-attachment: fixed;
+    text-align: center;
+}
+h1 {
+    font: inherit;
+    font-size: 3.2em;
+    text-transform: capitalize;
+    letter-spacing: 3px;
+    color: #fff;
+    text-shadow: 1px 1px 1px #000;
+    margin: .8em 1vw;
+    text-align: center;
+}
+
+@media screen and (max-width: 1920px) {
+    h1 {
+        font-size: 3.5vw;
+    }
+}
+@media screen and (max-width:1024px) {
+    h1 {
+        font-size: 4.5vw;/*vm相对单位，相对于视图窗口大小变化，应用于响应式页面*/
+    }
+}
+
+@media screen and (max-width:800px) {
+    h1 {
+        font-size: 5vw;
+    }
+}
+
+@media(max-width:480px) {
+    h1 {
+        font-size: 2.5em;
+    }
+    .w3ls-login form {
+        padding: 7.5vw;
+    }
+    .w3ls-login input[type="text"], .w3ls-login input[type="password"] {
+        padding: 13px 15px;
+    }
+    .w3ls-login input[type=submit] {
+        padding: 0.4em 0;
+        font-size: 1em;
+    }
+}
+
+@media screen and (max-width:440px) {
+    h1 {
+        font-size: 2.3em;
+    }
+    .parent {
+        display: block;
+    }
+}
+
+@media screen and (max-width:320px) {
+    h1 {
+        font-size: 1.8em;
+    }
+    .w3ls-login form {
+        padding: 25px 8px;
+    }
 }

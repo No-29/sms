@@ -217,16 +217,18 @@ img {
 /*--end reset--*/
 
 body {
-	font-family: 'Poppins', sans-serif;
-    font-size: 100%;
-    background: url(../images/1.jpg)no-repeat center top;
-    background-size: cover;
-    -webkit-background-size: cover;
+	font-family: 'Poppins', sans-serif;/*字体格式列表，优先性依次递减*/
+    font-size: 100%;/*把字体尺寸设置为基于父元素的百分比值*/
+    background: url(../images/1.jpg)no-repeat center top;/*图片不重复，水平位置居中，垂直位置居上*/
+    background-size: cover;/*设置背景图尺寸：length设置宽度、高度 percentage以父元素百分比设置宽度、高度
+                            cover覆盖整个背景区域(图片宽高比不变、铺满整个容器的宽高，而图片多出的部分则会被截掉)
+                            contain背景图完全适应内容区域(图片自身的宽高比不变，缩放至图片自身能完全显示出来，所以容器会有留白区域)*/
+    -webkit-background-size: cover;/*背景图片大小属性兼容性处理*/
     -moz-background-size: cover;
     -o-background-size: cover;
     -ms-background-size: cover;
-    background-attachment: fixed;
-    text-align: center;
+    background-attachment: fixed;/*设置背景图是否固定或随页面其余部分滚动 scroll滚动 fixed固定 inherit从父元素继承当前属性*/
+    text-align: center;/*设置文本水平对齐方式 left center right justify（两端对齐） inherit继承父元素属性*/
 }
 
 .w3ls-login {
@@ -246,12 +248,12 @@ body {
 }
 
 h1 {
-    font-size: 3.2em;
-    text-transform: capitalize;
-    color: #fff;
-    text-shadow: 1px 1px 1px #000;
-    letter-spacing: 3px;
-    margin: .8em 1vw;
+    font-size: 3.2em;/*一般情况下，1em（相对单位，大小不固定，body则相对浏览器的默认字体设置，子集相对父级）=12pt=16px=100% ，浏览器默认字体大小为16px*/
+    text-transform: capitalize;/*控制文本内容的大小写，none不做任何改变 capitalize每个单词以大写字母开头 uppercase全部大写 lowercase全部小写 inherit继承*/
+    color: #fff;/*内容颜色*/
+    text-shadow: 1px 1px 1px #000;/*字体阴影*/
+    letter-spacing: 3px;/*字符间距*/
+    margin: .8em 1vw;/*垂直 水平*/
     text-align: center;
 }
 
@@ -471,7 +473,7 @@ input:checked+.slider:before {
 
 /*--responsive--*/
 
-@media(max-width:1920px) {
+@media(max-width:1920px) {/*视图窗口小于等于1920px时，设置h1标签文本大小*/
     h1 {
         font-size: 3.5vw;
     }
@@ -479,7 +481,7 @@ input:checked+.slider:before {
 
 @media(max-width:1024px) {
     h1 {
-        font-size: 4.5vw;
+        font-size: 4.5vw;/*vm相对单位，相对于视图窗口大小变化，应用于响应式页面*/
     }
 }
 

@@ -13,9 +13,9 @@
 <html>
 <head>
     <title>login page</title>
-    <link href="/sms/statics/css/login_style.css" rel="stylesheet">
+    <link href="../statics/css/login_style.css" rel="stylesheet">
 </head>
 <body>
-welcome to login!!!
+    <h1>Clear login Form </h1>
 </body>
 </html>
