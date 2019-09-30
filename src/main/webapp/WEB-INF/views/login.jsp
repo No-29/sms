@@ -13,9 +13,20 @@
 <html>
 <head>
     <title>login page</title>
-    <link href="../statics/css/login_style.css" rel="stylesheet">
+    <%--<link href="../statics/css/login_style.css" rel="stylesheet">--%>
 </head>
 <body>
     <h1>Clear login Form </h1>
+    <div>
+        <form action="/login/toHome" method="post">
+            <div>
+                <input type="text" name="username" placeholder="Enter your name " required="">
+                <input type="password" name="password" placeholder="Enter your password " required="">
+            </div>
+            <div>
+                <input type="submit" value="Login">
+            </div>
+        </form>
+    </div>
 </body>
 </html>

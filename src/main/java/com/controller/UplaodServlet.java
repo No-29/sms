@@ -6,6 +6,7 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import sun.misc.BASE64Encoder;
@@ -46,6 +47,9 @@ public class UplaodServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("utf-8");
         resp.setCharacterEncoding("utf-8");
+        HttpSession session = req.getSession();
+        String username = (String)session.getAttribute("username");
+        String password = (String)session.getAttribute("password");
         String filePath = "";
         String fileName = "";
         String ext = "";
@@ -100,12 +104,15 @@ public class UplaodServlet extends HttpServlet {
 
             filePath = "/uploadFiles/" + fileName + ext;
             Statement stmt = dbConn.createStatement();
-            pstmt = dbConn.prepareStatement("update userInfo set userInfo.user_photo = ? where user_id = '1'");
+            pstmt = dbConn.prepareStatement("update userInfo set userInfo.user_photo = ? where user_name = ? and user_password = ?");
             pstmt.setString(1,filePath);
+            pstmt.setString(2,username);
+            pstmt.setString(3,password);
             pstmt.execute();
 
-            //req.setAttribute("photoPath",filePath);
-            req.getRequestDispatcher("/login/toLogin").forward(req,resp);
+            req.setAttribute("username",username);
+            req.setAttribute("password",password);
+            req.getRequestDispatcher("/login/singleSignOn").forward(req,resp);
             List resource = new ArrayList();
             resource.add(dbConn);
             resource.add(pstmt);
