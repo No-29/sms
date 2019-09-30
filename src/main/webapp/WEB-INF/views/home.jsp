@@ -19,6 +19,9 @@
         input{
             display: none;
         }
+        .login-out{
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -28,6 +31,7 @@
         </div>
         <input type="file" id="fileToUpload" name="files" onchange="upload()" style="/*opacity: 0;*/">
         <input id="submitBtn" type="submit" value="上传">
+        <input class="login-out" type="button" value="注销" onclick="quit()">
     </form>
 </body>
 <script>
@@ -37,6 +41,14 @@
     
     function upload() {
         document.getElementById("submitBtn").click();
+    }
+    
+    function quit() {
+        <%
+            session.removeAttribute("username");
+            session.removeAttribute("password");
+        %>
+        window.location.href = "/login/toLogin"
     }
 </script>
 </html>
