@@ -1,5 +1,6 @@
 package com.controller;
 
+import com.util.DatabaseUtils;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -7,6 +8,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import sun.misc.BASE64Encoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +18,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,7 +48,20 @@ public class UplaodServlet extends HttpServlet {
         resp.setCharacterEncoding("utf-8");
         String filePath = "";
         String fileName = "";
+        String ext = "";
+        Connection dbConn = null;
+        PreparedStatement pstmt = null;
         try {
+            /*String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver"; // 加载JDBC驱动
+            // 连接服务器和数据库ServletUser
+            String dbURL = "jdbc:sqlserver://localhost:1433;DatabaseName=mydatabase";
+            String userName = "sa"; // 默认用户名
+            String userPwd = "123"; // 密码
+            Class.forName(driverName);
+            dbConn = DriverManager.getConnection(dbURL, userName, userPwd);*/
+            //System.out.println("Connection Successful!"); // 如果连接成功
+
+            dbConn = DatabaseUtils.getConnection(dbConn);
             // 配置上传参数
             DiskFileItemFactory factory = new DiskFileItemFactory();
             ServletFileUpload upload = new ServletFileUpload(factory);
@@ -52,14 +73,19 @@ public class UplaodServlet extends HttpServlet {
             for (FileItem item : formItems) {
                 // 处理不在表单中的字段
                 if (!item.isFormField()) {
-                    fileName = item.getName();
+                    String[] fileNameArr = item.getName().split("\\.");
+                    fileName = fileNameArr[0];
+                    ext = "." + fileNameArr[1];
                     if(StringUtils.isEmpty(fileName)){
                         continue;
                     }
                     //定义上传文件的存放路径
                     String path = req.getServletContext().getRealPath("/uploadFiles");
                     //定义上传文件的完整路径
-                    filePath = String.format("%s/%s",path,fileName);
+                    BASE64Encoder base64 = new BASE64Encoder();
+                    fileName = base64.encode(fileName.getBytes());
+                    //fileName = URLEncoder.encode(fileName,"utf-8");
+                    filePath = String.format("%s/%s%s",path, fileName, ext);
                     File storeFile = new File(filePath);
                     File uploadDir = new File(filePath.replaceAll(fileName,""));
                     if(!uploadDir.exists()){
@@ -72,13 +98,33 @@ public class UplaodServlet extends HttpServlet {
                 }
             }
 
-            filePath = "/uploadFiles/" + fileName;
-            HttpSession session = req.getSession();
-            req.setAttribute("photoPath",filePath);
+            filePath = "/uploadFiles/" + fileName + ext;
+            Statement stmt = dbConn.createStatement();
+            pstmt = dbConn.prepareStatement("update userInfo set userInfo.user_photo = ? where user_id = '1'");
+            pstmt.setString(1,filePath);
+            pstmt.execute();
+
+            //req.setAttribute("photoPath",filePath);
             req.getRequestDispatcher("/login/toLogin").forward(req,resp);
+            List resource = new ArrayList();
+            resource.add(dbConn);
+            resource.add(pstmt);
+            DatabaseUtils.close(resource);
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    public static void closeResource(PreparedStatement pstmt,Connection conn){
+        try {
+            if(pstmt != null){
+                pstmt.close();
+            }
+            if(conn != null){
+                conn.close();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }

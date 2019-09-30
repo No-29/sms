@@ -2,7 +2,7 @@
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%
     String photoPath = (String)request.getAttribute("photoPath");
-    if(StringUtils.isEmpty(photoPath)){
+    if(StringUtils.isEmpty(photoPath) || StringUtils.equalsIgnoreCase(photoPath,"/uploadFiles/")){
         photoPath = "/uploadFiles/1.jpg";
     }
 %>
@@ -13,13 +13,13 @@
     <title>Title</title>
 </head>
 <body>
-    <form action="/uploadServlet" method="post" enctype="multipart/form-data">
+    <form id="uploadForm" action="/uploadServlet" method="post" enctype="multipart/form-data" style="text-align:center;">
+        <div style="text-align:center;">
+            <img src=<%=photoPath%> style="width:100px;height:100px;cursor:pointer;border-radius:50px;" onclick="select()">
+        </div>
         <input type="file" id="fileToUpload" name="files" onchange="upload()" style="/*opacity: 0;*/display:none;">
-        <input type="submit" value="上传">
+        <input id="submitBtn" type="submit" value="上传" style="display: none;">
     </form>
-    <div style="text-align:center;">
-        <img src=<%=photoPath%> style="width:100px;height:100px;cursor:pointer;border-radius:50px;" onclick="select()">
-    </div>
 </body>
 <script>
     function select() {
@@ -27,7 +27,7 @@
     }
     
     function upload() {
-        
+        document.getElementById("submitBtn").click();
     }
 </script>
 </html>
